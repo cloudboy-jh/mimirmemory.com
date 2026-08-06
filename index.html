@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="description" content="Private, self-hosted memory for coding agents. Install Mimir in your Cloudflare account.">
+  <title>Mimir · Private memory for coding agents</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0a0a0f;
+      --panel: #0d100f;
+      --panel-strong: #101511;
+      --text: #d7ded8;
+      --muted: #7f8d82;
+      --dim: #68756b;
+      --green: #00ff41;
+      --green-soft: #8effaa;
+      --line: #24402c;
+      --line-hot: #00a82b;
+      --font: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --page: 72rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+      font-family: var(--font);
+      scroll-behavior: auto;
+    }
+
+    body {
+      min-width: 20rem;
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 3px;
+    }
+
+    .shell {
+      width: min(calc(100% - 2.5rem), var(--page));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 4.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .wordmark {
+      color: var(--green);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .wordmark::before {
+      content: "> ";
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-height: 2.4rem;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--line);
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .github-link:hover {
+      border-color: var(--line-hot);
+      color: var(--green-soft);
+    }
+
+    .github-link svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+    }
+
+    main {
+      padding-block: clamp(3rem, 8vw, 6.5rem) 2.5rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+      gap: clamp(2rem, 7vw, 6rem);
+      align-items: end;
+      padding-bottom: clamp(2.75rem, 6vw, 5rem);
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      color: var(--green);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 13ch;
+      margin: 0;
+      color: #eef4ef;
+      font-size: clamp(2.35rem, 6.2vw, 5.6rem);
+      font-weight: 650;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero-copy {
+      max-width: 37rem;
+      margin: 0;
+      padding-bottom: 0.25rem;
+      color: #aeb9b0;
+      font-size: clamp(1rem, 1.4vw, 1.125rem);
+      line-height: 1.75;
+    }
+
+    .private-note {
+      display: block;
+      margin-top: 1.25rem;
+      color: var(--green-soft);
+      font-size: 0.82rem;
+    }
+
+    .private-note::before {
+      content: "[private] ";
+      color: var(--green);
+    }
+
+    .install {
+      margin-bottom: clamp(2.75rem, 6vw, 5rem);
+      border: 1px solid var(--line-hot);
+      background: var(--panel);
+    }
+
+    .terminal-bar {
+      min-height: 2.7rem;
+      padding: 0.55rem 0.8rem 0.55rem 1rem;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .terminal-title::before {
+      content: "●";
+      margin-right: 0.65rem;
+      color: var(--green);
+      font-size: 0.65rem;
+    }
+
+    .copy-button {
+      min-width: 5.75rem;
+      min-height: 1.9rem;
+      padding: 0.15rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      color: var(--muted);
+      background: var(--bg);
+      cursor: pointer;
+      font-size: 0.7rem;
+      line-height: 1;
+      text-transform: lowercase;
+    }
+
+    .copy-button:hover,
+    .copy-button:focus-visible,
+    .copy-button[data-state="copied"] {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .copy-button[data-state="failed"] {
+      border-color: #ff616e;
+      color: #ff8791;
+    }
+
+    .install-code {
+      margin: 0;
+      padding: clamp(1.35rem, 3.5vw, 2.25rem);
+      overflow-x: auto;
+      color: var(--green-soft);
+      font: 500 clamp(0.82rem, 1.8vw, 1.1rem)/2 var(--font);
+      white-space: pre;
+      scrollbar-color: var(--line-hot) var(--panel);
+    }
+
+    .prompt {
+      color: var(--green);
+      user-select: none;
+    }
+
+    .install-meta {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 1rem;
+      margin: 0;
+      padding: 1rem clamp(1.35rem, 3.5vw, 2.25rem);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .install-meta span:last-child {
+      color: #9aaa9d;
+    }
+
+    .command-reference {
+      border-top: 1px solid var(--line);
+    }
+
+    .reference-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1.15rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      color: #dfe8e1;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .reference-heading span {
+      color: var(--dim);
+      font-size: 0.72rem;
+    }
+
+    .command-groups {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .command-group {
+      min-width: 0;
+      padding: 1.35rem 1.25rem 1.5rem;
+      border-right: 1px solid var(--line);
+    }
+
+    .command-group:last-child {
+      border-right: 0;
+    }
+
+    .group-title {
+      margin: 0 0 0.8rem;
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .command-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .command-row {
+      position: relative;
+      min-width: 0;
+      padding: 0.65rem 0;
+      border-top: 1px solid #17261b;
+    }
+
+    .command-row:first-child {
+      border-top: 0;
+    }
+
+    .command-row code {
+      display: block;
+      padding-right: 4.3rem;
+      overflow-x: auto;
+      color: #c7d2c9;
+      font: 500 0.78rem/1.5 var(--font);
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+
+    .command-row p {
+      margin: 0.2rem 0 0;
+      color: var(--muted);
+      font-size: 0.7rem;
+      line-height: 1.45;
+    }
+
+    .command-row .copy-button {
+      position: absolute;
+      top: 0.55rem;
+      right: 0;
+      min-width: 3.7rem;
+      opacity: 0;
+    }
+
+    .command-row:hover .copy-button,
+    .command-row:focus-within .copy-button {
+      opacity: 1;
+    }
+
+    footer {
+      padding-block: 2.25rem;
+      color: var(--dim);
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    footer span {
+      color: #62806a;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 56rem) {
+      .hero {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 1.75rem;
+      }
+
+      .hero-copy {
+        max-width: 46rem;
+      }
+
+      .command-groups {
+        grid-template-columns: 1fr;
+      }
+
+      .command-group {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .command-group:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 38rem) {
+      body {
+        font-size: 0.875rem;
+      }
+
+      .shell {
+        width: min(calc(100% - 1.5rem), var(--page));
+      }
+
+      .header-inner {
+        min-height: 3.9rem;
+      }
+
+      main {
+        padding-top: 2.75rem;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 12.5vw, 3.75rem);
+      }
+
+      .install-meta {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+      }
+
+      .terminal-bar {
+        padding-left: 0.75rem;
+      }
+
+      .install-code {
+        padding-inline: 1rem;
+      }
+
+      .command-group {
+        padding-inline: 0.9rem;
+      }
+
+      .reference-heading span {
+        display: none;
+      }
+
+      .command-row .copy-button {
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      :root {
+        --muted: #a7b5aa;
+        --dim: #718077;
+        --line: #42704d;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <div class="wordmark" aria-label="Mimir">Mimir</div>
+      <a class="github-link" href="https://github.com/cloudboy-jh/Mimir" aria-label="Mimir on GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.02c-3.22.7-3.9-1.36-3.9-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.75 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.71 5.38-5.29 5.67.42.36.79 1.07.79 2.16v3.02c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">Memory infrastructure for agents</p>
+        <h1 id="hero-title">Private memory for coding agents</h1>
+      </div>
+      <p class="hero-copy">
+        Mimir records what your coding agents attempted, which models and files were involved, what failed, and whether the work actually landed.
+        <span class="private-note">Self-hosted inside your Cloudflare account. No Mimir account or shared backend.</span>
+      </p>
+    </section>
+
+    <section class="install" aria-labelledby="install-title">
+      <div class="terminal-bar">
+        <span class="terminal-title" id="install-title">Install</span>
+        <button class="copy-button" type="button" data-copy="go run github.com/cloudboy-jh/mimir/cmd/mimir@latest install&#10;mimir setup" aria-label="Copy install commands">copy</button>
+      </div>
+      <pre class="install-code"><code><span class="prompt">$ </span>go run github.com/cloudboy-jh/mimir/cmd/mimir@latest install
+<span class="prompt">$ </span>mimir setup</code></pre>
+      <p class="install-meta">
+        <span>Requirements: Cloudflare account, OpenRouter API key, Go 1.25+, Node.js 22 + npm, Bun.</span>
+        <span>To connect another machine: <strong>mimir login</strong></span>
+      </p>
+    </section>
+
+    <section class="command-reference" aria-labelledby="commands-title">
+      <div class="reference-heading">
+        <h2 id="commands-title">Quickstart / command reference</h2>
+        <span>select a command to copy</span>
+      </div>
+
+      <div class="command-groups">
+        <section class="command-group" aria-labelledby="install-group">
+          <h3 class="group-title" id="install-group">01 / install + setup</h3>
+          <ul class="command-list">
+            <li class="command-row">
+              <code>mimir install</code>
+              <p>reconcile managed local artifacts</p>
+              <button class="copy-button" type="button" data-copy="mimir install" aria-label="Copy mimir install">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir setup [--quick]</code>
+              <p>provision and deploy Mimir</p>
+              <button class="copy-button" type="button" data-copy="mimir setup" aria-label="Copy mimir setup">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir login</code>
+              <p>connect another machine</p>
+              <button class="copy-button" type="button" data-copy="mimir login" aria-label="Copy mimir login">copy</button>
+            </li>
+          </ul>
+        </section>
+
+        <section class="command-group" aria-labelledby="use-group">
+          <h3 class="group-title" id="use-group">02 / use</h3>
+          <ul class="command-list">
+            <li class="command-row">
+              <code>mimir list [filters]</code>
+              <p>browse recent sessions</p>
+              <button class="copy-button" type="button" data-copy="mimir list" aria-label="Copy mimir list">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir search &lt;query&gt;</code>
+              <p>search saved session memory</p>
+              <button class="copy-button" type="button" data-copy="mimir search" aria-label="Copy mimir search">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir session get &lt;id&gt;</code>
+              <p>inspect one session record</p>
+              <button class="copy-button" type="button" data-copy="mimir session get" aria-label="Copy mimir session get">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir session outcome &lt;id&gt;</code>
+              <p>record an evidenced work result</p>
+              <button class="copy-button" type="button" data-copy="mimir session outcome" aria-label="Copy mimir session outcome">copy</button>
+            </li>
+          </ul>
+        </section>
+
+        <section class="command-group" aria-labelledby="manage-group">
+          <h3 class="group-title" id="manage-group">03 / manage</h3>
+          <ul class="command-list">
+            <li class="command-row">
+              <code>mimir dashboard</code>
+              <p>open the private dashboard</p>
+              <button class="copy-button" type="button" data-copy="mimir dashboard" aria-label="Copy mimir dashboard">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir tui</code>
+              <p>open terminal UI</p>
+              <button class="copy-button" type="button" data-copy="mimir tui" aria-label="Copy mimir tui">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir doctor</code>
+              <p>validate deployment and integrations</p>
+              <button class="copy-button" type="button" data-copy="mimir doctor" aria-label="Copy mimir doctor">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir deploy</code>
+              <p>deploy Worker and dashboard changes</p>
+              <button class="copy-button" type="button" data-copy="mimir deploy" aria-label="Copy mimir deploy">copy</button>
+            </li>
+            <li class="command-row">
+              <code>mimir update</code>
+              <p>update Mimir and managed integrations</p>
+              <button class="copy-button" type="button" data-copy="mimir update" aria-label="Copy mimir update">copy</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>◆ mimir</span></footer>
+  <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
+
+  <script>
+    const status = document.querySelector('#copy-status');
+    const resetTimers = new WeakMap();
+
+    document.addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-copy]');
+      if (!button) return;
+
+      const originalLabel = 'copy';
+      clearTimeout(resetTimers.get(button));
+
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy);
+        button.textContent = 'copied ✓';
+        button.dataset.state = 'copied';
+        status.textContent = `${button.getAttribute('aria-label')} copied`;
+      } catch {
+        button.textContent = 'failed';
+        button.dataset.state = 'failed';
+        status.textContent = 'Clipboard access failed';
+      }
+
+      const timer = setTimeout(() => {
+        button.textContent = originalLabel;
+        delete button.dataset.state;
+      }, 1800);
+
+      resetTimers.set(button, timer);
+    });
+  </script>
+</body>
+</html>
