@@ -12,7 +12,7 @@
 
 ## Objective
 
-A one-page download landing page at `mimirmemory.com`. Dark terminal aesthetic, Mimir themed, zero fluff. Someone lands, understands what Mimir is in 5 seconds, and sees the install command.
+A one-page download landing page at `mimirmemory.com`. Dark instrument aesthetic aligned with the Mimir dashboard, zero fluff. Someone lands, understands what Mimir is in 5 seconds, and sees the install command.
 
 ---
 
@@ -34,8 +34,8 @@ There is no Mimir account, hosted backend, or shared memory service. It's self-h
 ## Design
 
 ### Vibe
-- Dark terminal aesthetic — `#0a0a0f` background, `#00ff41` (terminal green) accent
-- Monospace font throughout (JetBrains Mono via Google Fonts, `Fira Code`, or system `monospace` stack)
+- Dark dashboard aesthetic — Zinc 950 (`#09090b`) canvas, Zinc 900 (`#18181b`) surfaces, and Teal 400 (`#2dd4bf`) signal color
+- IBM Plex Sans for interface and prose; IBM Plex Mono only for commands and technical evidence
 - Single page, compact. Everything above fold or near-fold on desktop.
 - Terminal-style bordered code blocks
 - No animations, no stock photos, no gradients
@@ -43,7 +43,7 @@ There is no Mimir account, hosted backend, or shared memory service. It's self-h
 ### Structure (top to bottom)
 
 #### 1. Header bar
-- Left: **Mimir** text logo in monospace, green accent, no icon
+- Left: Mimir pixel-art wordmark from `assets/mimir-readme.png`
 - Right: GitHub button — SVG GitHub icon + "GitHub", links to `https://github.com/cloudboy-jh/Mimir`
 
 #### 2. Hero
@@ -98,9 +98,9 @@ Each command row gets a copy-to-clipboard on hover (just the command part, not t
 
 ## Technical requirements
 
-### Single HTML file
-- Self-contained `.html` — no build step, no framework, no JS dependencies
-- Inline CSS (no external stylesheets except Google Fonts for JetBrains Mono if used)
+### Static files
+- Static `.html` plus the supplied wordmark and favicon assets — no build step, no framework, no JS dependencies
+- Inline CSS (no external stylesheets except Google Fonts for IBM Plex Sans and IBM Plex Mono)
 - Vanilla JS only for copy-to-clipboard (`navigator.clipboard.writeText()`)
 
 ### Copy-to-clipboard
@@ -113,7 +113,7 @@ Each command row gets a copy-to-clipboard on hover (just the command part, not t
 
 ### Performance
 - Zero tracking, no analytics, no third-party requests (except Google Fonts)
-- Target: sub-50KB, sub-100ms first paint
+- Target: sub-50KB for local page assets, sub-100ms first paint
 
 ---
 
@@ -155,10 +155,10 @@ mimir doctor      — validate deployment
 
 ## Visual reference
 
-Feels like a terminal window — black background, green text, monospace. Header, install block, and quickstart grid are the three sections. No hero image, no logo graphic, no decorative elements beyond terminal borders and the copy buttons.
+Feels like the Mimir dashboard — a Zinc-black canvas, flat bordered surfaces, compact mechanical controls, IBM Plex typography, and teal used only as a signal. The pixel-art wordmark carries the identity; commands remain monospace evidence.
 
 ---
 
 ## Deliverable
 
-A single `index.html` written and pushed to a repo so Cloudflare Pages picks it up. Openable in a browser in 2 minutes — someone knows what Mimir is, how it works, and how to install it.
+An `index.html` plus optimized wordmark and favicon assets, written and pushed to a repo so Cloudflare Pages picks them up. Openable in a browser in 2 minutes — someone knows what Mimir is, how it works, and how to install it.

@@ -3,24 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a0a0f">
+  <meta name="theme-color" content="#09090b">
   <meta name="description" content="Private, self-hosted memory for coding agents. Install Mimir in your Cloudflare account.">
+  <link rel="icon" type="image/png" href="assets/mimir-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
   <title>Mimir · Private memory for coding agents</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #0a0a0f;
-      --panel: #0d100f;
-      --panel-strong: #101511;
-      --text: #d7ded8;
-      --muted: #7f8d82;
-      --dim: #68756b;
-      --green: #00ff41;
-      --green-soft: #8effaa;
-      --line: #24402c;
-      --line-hot: #00a82b;
-      --font: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      --page: 72rem;
+      --bg: #09090b;
+      --panel: #18181b;
+      --panel-strong: #202024;
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --dim: #71717a;
+      --teal: #2dd4bf;
+      --teal-deep: #0d9488;
+      --line: #27272a;
+      --control: #3f3f46;
+      --font: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "IBM Plex Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      --page: 93.75rem;
     }
 
     * {
@@ -57,7 +62,7 @@
     }
 
     :focus-visible {
-      outline: 2px solid var(--green);
+      outline: 2px solid var(--teal-deep);
       outline-offset: 3px;
     }
 
@@ -67,11 +72,15 @@
     }
 
     .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       border-bottom: 1px solid var(--line);
+      background: var(--bg);
     }
 
     .header-inner {
-      min-height: 4.5rem;
+      min-height: 3.75rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -79,32 +88,35 @@
     }
 
     .wordmark {
-      color: var(--green);
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .wordmark::before {
-      content: "> ";
-      color: var(--muted);
-      font-weight: 400;
+    .wordmark img {
+      display: block;
+      width: auto;
+      height: 2.4rem;
+      image-rendering: crisp-edges;
     }
 
     .github-link {
       display: inline-flex;
       align-items: center;
       gap: 0.55rem;
-      min-height: 2.4rem;
-      padding: 0.35rem 0.75rem;
-      border: 1px solid var(--line);
+      min-height: 2.125rem;
+      padding: 0.3rem 0.65rem;
+      border: 1px solid var(--control);
+      border-radius: 5px;
       color: var(--text);
+      background: var(--panel);
       text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
     }
 
     .github-link:hover {
-      border-color: var(--line-hot);
-      color: var(--green-soft);
+      border-color: #52525b;
+      background: #27272a;
     }
 
     .github-link svg {
@@ -114,7 +126,7 @@
     }
 
     main {
-      padding-block: clamp(3rem, 8vw, 6.5rem) 2.5rem;
+      padding-block: clamp(3rem, 7vw, 6rem) 2.5rem;
     }
 
     .hero {
@@ -127,27 +139,37 @@
 
     .eyebrow {
       margin: 0 0 1rem;
-      color: var(--green);
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 0.4rem;
+      height: 0.4rem;
+      flex: 0 0 auto;
+      background: var(--teal);
     }
 
     h1 {
       max-width: 13ch;
       margin: 0;
-      color: #eef4ef;
-      font-size: clamp(2.35rem, 6.2vw, 5.6rem);
-      font-weight: 650;
-      letter-spacing: -0.055em;
-      line-height: 0.98;
+      color: #fafafa;
+      font-size: clamp(2.5rem, 5.2vw, 4.9rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.02;
     }
 
     .hero-copy {
       max-width: 37rem;
       margin: 0;
       padding-bottom: 0.25rem;
-      color: #aeb9b0;
+      color: #a1a1aa;
       font-size: clamp(1rem, 1.4vw, 1.125rem);
       line-height: 1.75;
     }
@@ -155,18 +177,21 @@
     .private-note {
       display: block;
       margin-top: 1.25rem;
-      color: var(--green-soft);
-      font-size: 0.82rem;
+      color: #d4d4d8;
+      font-size: 0.875rem;
+      font-weight: 500;
     }
 
     .private-note::before {
-      content: "[private] ";
-      color: var(--green);
+      content: "◆ ";
+      color: var(--teal);
     }
 
     .install {
       margin-bottom: clamp(2.75rem, 6vw, 5rem);
-      border: 1px solid var(--line-hot);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
       background: var(--panel);
     }
 
@@ -178,38 +203,42 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      color: var(--muted);
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      color: #d4d4d8;
+      font-size: 0.8125rem;
+      font-weight: 600;
     }
 
     .terminal-title::before {
-      content: "●";
+      content: "";
       margin-right: 0.65rem;
-      color: var(--green);
-      font-size: 0.65rem;
+      display: inline-block;
+      width: 0.4rem;
+      height: 0.4rem;
+      background: var(--teal);
+      vertical-align: 0.08em;
     }
 
     .copy-button {
       min-width: 5.75rem;
       min-height: 1.9rem;
       padding: 0.15rem 0.55rem;
-      border: 1px solid var(--line);
-      border-radius: 0;
-      color: var(--muted);
-      background: var(--bg);
+      border: 1px solid var(--control);
+      border-radius: 5px;
+      color: #d4d4d8;
+      background: #27272a;
       cursor: pointer;
       font-size: 0.7rem;
       line-height: 1;
+      font-family: var(--font);
+      font-weight: 500;
       text-transform: lowercase;
     }
 
     .copy-button:hover,
     .copy-button:focus-visible,
     .copy-button[data-state="copied"] {
-      border-color: var(--green);
-      color: var(--green);
+      border-color: var(--teal-deep);
+      color: var(--teal);
     }
 
     .copy-button[data-state="failed"] {
@@ -221,14 +250,14 @@
       margin: 0;
       padding: clamp(1.35rem, 3.5vw, 2.25rem);
       overflow-x: auto;
-      color: var(--green-soft);
-      font: 500 clamp(0.82rem, 1.8vw, 1.1rem)/2 var(--font);
+      color: #e4e4e7;
+      font: 400 clamp(0.82rem, 1.6vw, 1rem)/2 var(--mono);
       white-space: pre;
-      scrollbar-color: var(--line-hot) var(--panel);
+      scrollbar-color: var(--control) var(--panel);
     }
 
     .prompt {
-      color: var(--green);
+      color: var(--teal);
       user-select: none;
     }
 
@@ -244,11 +273,14 @@
     }
 
     .install-meta span:last-child {
-      color: #9aaa9d;
+      color: #d4d4d8;
     }
 
     .command-reference {
-      border-top: 1px solid var(--line);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
     }
 
     .reference-heading {
@@ -256,13 +288,13 @@
       align-items: baseline;
       justify-content: space-between;
       gap: 1rem;
-      padding-block: 1.15rem;
+      padding: 1rem 1.25rem;
       border-bottom: 1px solid var(--line);
     }
 
     h2 {
       margin: 0;
-      color: #dfe8e1;
+      color: #f4f4f5;
       font-size: 1rem;
       font-weight: 600;
     }
@@ -275,7 +307,7 @@
     .command-groups {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      border-bottom: 1px solid var(--line);
+      border-bottom: 0;
     }
 
     .command-group {
@@ -290,8 +322,8 @@
 
     .group-title {
       margin: 0 0 0.8rem;
-      color: var(--green);
-      font-size: 0.72rem;
+      color: #d4d4d8;
+      font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -307,7 +339,7 @@
       position: relative;
       min-width: 0;
       padding: 0.65rem 0;
-      border-top: 1px solid #17261b;
+      border-top: 1px solid var(--line);
     }
 
     .command-row:first-child {
@@ -318,8 +350,8 @@
       display: block;
       padding-right: 4.3rem;
       overflow-x: auto;
-      color: #c7d2c9;
-      font: 500 0.78rem/1.5 var(--font);
+      color: #e4e4e7;
+      font: 400 0.76rem/1.5 var(--mono);
       white-space: nowrap;
       scrollbar-width: thin;
     }
@@ -352,7 +384,7 @@
     }
 
     footer span {
-      color: #62806a;
+      color: #a1a1aa;
     }
 
     .sr-only {
@@ -402,7 +434,7 @@
       }
 
       .header-inner {
-        min-height: 3.9rem;
+        min-height: 3.75rem;
       }
 
       main {
@@ -441,9 +473,9 @@
 
     @media (prefers-contrast: more) {
       :root {
-        --muted: #a7b5aa;
-        --dim: #718077;
-        --line: #42704d;
+        --muted: #b4b4bc;
+        --dim: #8d8d96;
+        --line: #3f3f46;
       }
     }
   </style>
@@ -451,7 +483,9 @@
 <body>
   <header class="site-header">
     <div class="shell header-inner">
-      <div class="wordmark" aria-label="Mimir">Mimir</div>
+      <a class="wordmark" href="/" aria-label="Mimir home">
+        <img src="assets/mimir-readme.png" width="500" height="200" alt="Mimir">
+      </a>
       <a class="github-link" href="https://github.com/cloudboy-jh/Mimir" aria-label="Mimir on GitHub">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.02c-3.22.7-3.9-1.36-3.9-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.75 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.71 5.38-5.29 5.67.42.36.79 1.07.79 2.16v3.02c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/>
