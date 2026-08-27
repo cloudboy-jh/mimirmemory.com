@@ -108,10 +108,15 @@
       padding-top: 4.8rem;
     }
 
-    .github-link {
+    .header-links {
       position: absolute;
       top: 0;
       right: 0;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .github-link {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
@@ -128,7 +133,6 @@
 
     .github-link:hover { border-color: #52525b; background: var(--surface-hover); }
     .github-link svg { width: 1rem; height: 1rem; fill: currentColor; }
-    .github-link + .github-link { top: 2.35rem; }
     .github-link[href*="docs"] svg { fill: none; stroke: currentColor; }
 
     .eyebrow {
@@ -618,19 +622,21 @@
       </a>
 
       <div class="masthead-copy">
-        <a class="github-link" href="https://github.com/cloudboy-jh/Mimir" aria-label="Mimir on GitHub">
+        <div class="header-links">
+                <a class="github-link" href="https://github.com/cloudboy-jh/Mimir" aria-label="Mimir on GitHub">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.02c-3.22.7-3.9-1.36-3.9-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.75 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.71 5.38-5.29 5.67.42.36.79 1.07.79 2.16v3.02c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/>
                   </svg>
                   <span>GitHub</span>
                 </a>
-                <a class="github-link" href="https://mimir-docs.pages.dev" aria-label="Mimir documentation" style="right: 0; top: 2.6rem;">
+                <a class="github-link" href="https://mimir-docs.pages.dev" aria-label="Mimir documentation">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                   </svg>
                   <span>Docs</span>
                 </a>
+              </div>
         <p class="eyebrow">Self-hosted agent memory</p>
         <h1>Private memory for coding agents</h1>
         <p class="lede">
