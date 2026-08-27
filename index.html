@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#09090b">
-  <meta name="description" content="Private, self-hosted memory for coding agents. Install Mimir in your Cloudflare account.">
+  <meta name="description" content="Self-hosted agent memory. Runs in your Cloudflare account.">
   <link rel="icon" type="image/png" href="assets/mimir-favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <title>Mimir · Private memory for coding agents</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>Mimir · Self-hosted agent memory</title>
   <style>
     :root {
       color-scheme: dark;
@@ -28,18 +28,14 @@
       --page: 70rem;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      background: var(--canvas);
-      font-family: var(--sans);
-    }
+    html { background: var(--canvas); font-family: var(--sans); }
 
     body {
       min-width: 20rem;
       margin: 0;
+      overflow-x: hidden;
       color: var(--ink);
       background: var(--canvas);
       font-size: 0.9375rem;
@@ -47,29 +43,18 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    a {
-      color: inherit;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    :focus-visible {
-      outline: 2px solid var(--teal-deep);
-      outline-offset: 3px;
-    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    :focus-visible { outline: 2px solid var(--teal-deep); outline-offset: 3px; }
 
     .shell {
-      width: min(calc(100% - 3rem), var(--page));
+      width: calc(100% - 3rem);
+      max-width: var(--page);
       margin-inline: auto;
     }
 
+    /* ── Hero ── */
     .site-header {
       --pointer-x: 65%;
       --pointer-y: 45%;
@@ -93,9 +78,7 @@
       transition: opacity 220ms ease-out;
     }
 
-    .site-header:hover::before {
-      opacity: 1;
-    }
+    .site-header:hover::before { opacity: 1; }
 
     .masthead {
       position: relative;
@@ -143,16 +126,9 @@
       font-weight: 500;
     }
 
-    .github-link:hover {
-      border-color: #52525b;
-      background: var(--surface-hover);
-    }
+    .github-link:hover { border-color: #52525b; background: var(--surface-hover); }
 
-    .github-link svg {
-      width: 1rem;
-      height: 1rem;
-      fill: currentColor;
-    }
+    .github-link svg { width: 1rem; height: 1rem; fill: currentColor; }
 
     .eyebrow {
       display: flex;
@@ -203,6 +179,7 @@
       color: var(--teal);
     }
 
+    /* ── Main ── */
     main {
       padding-block: clamp(2.75rem, 6vw, 4.5rem) 2.5rem;
     }
@@ -224,55 +201,127 @@
     }
 
     .section-heading p {
+      min-width: 0;
+      max-width: 44%;
       margin: 0;
+      overflow: hidden;
       color: var(--quiet);
       font-size: 0.8125rem;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .install-panel {
+    section + section {
+      margin-top: clamp(2rem, 4vw, 3rem);
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+      gap: 1rem;
+    }
+
+    .setup-grid section,
+    .setup-grid section + section {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      margin-top: 0;
+    }
+
+    .setup-grid + section {
+      margin-top: clamp(2rem, 4vw, 3rem);
+    }
+
+    .setup-grid .code-panel {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .setup-grid .code-note {
+      margin-top: auto;
+    }
+
+    .setup-grid .section-heading {
+      min-height: 2rem;
+      align-items: center;
+    }
+
+    .setup-grid .section-heading p {
+      display: none;
+    }
+
+    .setup-grid h2 {
+      font-size: 1.05rem;
+      white-space: nowrap;
+    }
+
+    /* ── Code panels (install + demo) ── */
+    .code-panel {
       overflow: hidden;
       border: 1px solid var(--rule);
       border-radius: 7px;
       background: var(--surface);
     }
 
-    .install-command {
+    .code-block {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 1.5rem;
       align-items: center;
-      min-height: 7rem;
-      padding: 1.25rem;
+      min-height: 4.75rem;
+      padding: 0.9rem 1rem;
     }
 
-    .command {
+    .code-block .command {
+      width: 100%;
       min-width: 0;
       margin: 0;
       overflow-x: auto;
       color: #e4e4e7;
-      font: 400 0.82rem/1.6 var(--mono);
-      white-space: nowrap;
+      font: 400 0.75rem/1.85 var(--mono);
+      white-space: pre;
       scrollbar-width: thin;
       scrollbar-color: var(--control) var(--surface);
     }
 
-    .install-command .command {
-      line-height: 2.1;
-      white-space: pre;
-    }
-
-    .install-note {
+    .code-note {
       margin: 0;
-      padding: 0.8rem 1.25rem;
+      padding: 0.65rem 1rem;
       border-top: 1px solid var(--rule);
       color: var(--muted);
       font-size: 0.75rem;
+      line-height: 1.5;
     }
 
-    .prompt {
-      color: var(--teal);
-      user-select: none;
+    .platform-tabs {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.45rem;
+      border-bottom: 1px solid var(--rule);
     }
+
+    .platform-tab {
+      padding: 0.35rem 0.65rem;
+      border: 0;
+      border-radius: 4px;
+      color: var(--quiet);
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .platform-tab[aria-selected="true"] {
+      color: var(--ink);
+      background: #27272a;
+    }
+
+    .platform-panel[hidden] { display: none; }
+
+    .prompt { color: var(--teal); user-select: none; }
 
     .copy-button {
       position: relative;
@@ -292,19 +341,8 @@
       font-weight: 500;
     }
 
-    .copy-button svg {
-      width: 1rem;
-      height: 1rem;
-      fill: none;
-      stroke: currentColor;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-width: 1.75;
-    }
-
-    .copy-button .check-icon {
-      display: none;
-    }
+    .copy-button svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.75; }
+    .copy-button .check-icon { display: none; }
 
     .copy-button::after {
       content: attr(data-tooltip);
@@ -325,54 +363,82 @@
     }
 
     .copy-button:hover::after,
-    .copy-button:focus-visible::after {
-      opacity: 1;
-    }
+    .copy-button:focus-visible::after { opacity: 1; }
 
     .copy-button:hover,
     .copy-button:focus-visible,
-    .copy-button[data-state="copied"] {
-      border-color: var(--teal-deep);
-      color: var(--teal);
+    .copy-button[data-state="copied"] { border-color: var(--teal-deep); color: var(--teal); }
+
+    .copy-button[data-state="copied"] .copy-icon { display: none; }
+    .copy-button[data-state="copied"] .check-icon { display: block; }
+    .copy-button[data-state="copied"]::after { content: "Copied"; }
+
+    .copy-button[data-state="failed"] { border-color: #f87171; color: #fca5a5; }
+    .copy-button[data-state="failed"]::after { content: "Failed"; }
+
+    /* ── Harness grid ── */
+    .harness-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      border: 1px solid var(--rule);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--surface);
     }
 
-    .copy-button[data-state="copied"] .copy-icon {
-      display: none;
-    }
-
-    .copy-button[data-state="copied"] .check-icon {
-      display: block;
-    }
-
-    .copy-button[data-state="copied"]::after {
-      content: "Copied";
-    }
-
-    .copy-button[data-state="failed"] {
-      border-color: #f87171;
-      color: #fca5a5;
-    }
-
-    .copy-button[data-state="failed"]::after {
-      content: "Failed";
-    }
-
-    .once-installed {
-      margin-top: clamp(2.75rem, 6vw, 4.5rem);
-    }
-
-    .reference-link {
-      color: var(--teal);
-      text-decoration: none;
+    .harness-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      min-width: 0;
+      padding: 1rem 0.6rem;
+      border-left: 1px solid var(--rule);
       font-size: 0.8125rem;
       font-weight: 500;
+      color: #d4d4d8;
     }
 
-    .reference-link:hover {
-      text-decoration: underline;
-      text-underline-offset: 0.2em;
+    .harness-item:first-child { border-left: 0; }
+
+    .harness-item img {
+      width: 1.05rem;
+      height: 1.05rem;
+      flex: 0 0 auto;
+      object-fit: contain;
+      filter: invert(92%) sepia(4%) saturate(84%) hue-rotate(202deg) brightness(95%);
     }
 
+    .harness-item span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Screenshot ── */
+    .screenshot-panel {
+      border: 1px solid var(--rule);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .screenshot-panel img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .screenshot-label {
+      margin: 0;
+      padding: 0.8rem 1.25rem;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    /* ── Action list (CLI ref) ── */
     .action-list {
       margin: 0;
       padding: 0;
@@ -391,9 +457,7 @@
       border-top: 1px solid var(--rule);
     }
 
-    .action-row:first-child {
-      border-top: 0;
-    }
+    .action-row:first-child { border-top: 0; }
 
     .action-row code {
       overflow-x: auto;
@@ -409,6 +473,16 @@
       font-size: 0.8125rem;
     }
 
+    .reference-link {
+      color: var(--teal);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+
+    .reference-link:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+    /* ── Requirements ── */
     .requirements {
       display: grid;
       grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 0.5fr);
@@ -422,22 +496,38 @@
       font-size: 0.75rem;
     }
 
-    .requirements p {
-      margin: 0;
-    }
+    .requirements p { margin: 0; }
+    .requirements strong { color: #d4d4d8; font-family: var(--mono); font-weight: 500; }
 
-    .requirements strong {
-      color: #d4d4d8;
-      font-family: var(--mono);
-      font-weight: 500;
-    }
-
+    /* ── Footer ── */
     footer {
       padding-block: 2rem 2.5rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+    }
+
+    .footer-brand {
       color: var(--quiet);
-      text-align: center;
       font-size: 0.75rem;
     }
+
+    .footer-brand .diamond { color: var(--teal); }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.8125rem;
+    }
+
+    .footer-links a { color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--ink); }
 
     .sr-only {
       position: absolute;
@@ -451,10 +541,9 @@
       border: 0;
     }
 
+    /* ── Responsive ── */
     @media (max-width: 48rem) {
-      .shell {
-        width: min(calc(100% - 2rem), var(--page));
-      }
+      .shell { width: calc(100% - 2rem); }
 
       .masthead {
         grid-template-columns: 1fr;
@@ -463,92 +552,50 @@
         padding-block: 2rem 2.75rem;
       }
 
-      .wordmark {
-        width: min(65vw, 16rem);
-      }
+      .wordmark { width: min(65vw, 16rem); }
+      .masthead-copy { padding-top: 3rem; }
+      .github-link { left: auto; right: 0; }
+      h1 { font-size: clamp(2.2rem, 10vw, 3.25rem); }
 
-      .masthead-copy {
-        padding-top: 3rem;
-      }
+      .code-block { gap: 1rem; }
 
-      .github-link {
-        left: auto;
-        right: 0;
-      }
-
-      h1 {
-        font-size: clamp(2.2rem, 10vw, 3.25rem);
-      }
-
-      .install-command {
-        gap: 1rem;
-      }
+      .setup-grid { grid-template-columns: 1fr; }
+      .setup-grid section + section { margin-top: 2rem; }
+      .setup-grid .section-heading { min-height: 0; }
+      .setup-grid h2 { white-space: normal; }
 
       .action-row {
         grid-template-columns: minmax(0, 1fr) auto;
         gap: 0.4rem 1rem;
       }
 
-      .action-row p {
-        grid-column: 1;
-      }
+      .action-row p { grid-column: 1; }
+      .action-row .copy-button { grid-column: 2; grid-row: 1 / 3; }
 
-      .action-row .copy-button {
-        grid-column: 2;
-        grid-row: 1 / 3;
-      }
+      .harness-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .harness-item { justify-content: flex-start; border-top: 1px solid var(--rule); }
+      .harness-item:nth-child(odd) { border-left: 0; }
+      .harness-item:nth-child(-n + 2) { border-top: 0; }
 
-      .requirements {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-      }
+      .requirements { grid-template-columns: 1fr; gap: 0.5rem; }
     }
 
     @media (max-width: 31rem) {
-      .section-heading {
-        display: block;
-      }
-
-      .section-heading p,
-      .reference-link {
-        display: inline-block;
-        margin-top: 0.35rem;
-      }
-
-      .install-command {
-        grid-template-columns: minmax(0, 1fr) auto;
-        padding-inline: 1rem;
-      }
-
-      .action-row {
-        grid-template-columns: 1fr;
-        padding-block: 1rem;
-      }
-
-      .action-row p,
-      .action-row .copy-button {
-        grid-column: 1;
-        grid-row: auto;
-      }
-
-      .action-row .copy-button {
-        justify-self: start;
-        margin-top: 0.35rem;
-      }
+      .section-heading { display: block; }
+      .section-heading p, .reference-link { display: inline-block; margin-top: 0.35rem; }
+      .code-block { grid-template-columns: minmax(0, 1fr) auto; padding-inline: 1rem; }
+      .action-row { grid-template-columns: 1fr; padding-block: 1rem; }
+      .action-row p, .action-row .copy-button { grid-column: 1; grid-row: auto; }
+      .action-row .copy-button { justify-self: start; margin-top: 0.35rem; }
+      .footer-inner { flex-direction: column; text-align: center; }
     }
 
     @media (prefers-contrast: more) {
-      :root {
-        --muted: #b4b4bc;
-        --quiet: #8d8d96;
-        --rule: #3f3f46;
-      }
+      :root { --muted: #b4b4bc; --quiet: #8d8d96; --rule: #3f3f46; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .site-header::before {
-        transition: none;
-      }
+      .site-header::before { transition: none; }
     }
   </style>
 </head>
@@ -576,40 +623,106 @@
           </svg>
           <span>GitHub</span>
         </a>
-        <p class="eyebrow">Memory infrastructure for coding agents</p>
+        <p class="eyebrow">Self-hosted agent memory</p>
         <h1>Private memory for coding agents</h1>
         <p class="lede">
-          Mimir records what your coding agents attempted, which models and files were involved, what failed, and whether the work actually landed.
-          <span class="private-note">Self-hosted inside your Cloudflare account. No Mimir account or shared backend.</span>
+          Mimir records every session - models, files, outcomes, failures.
+          <span class="private-note">Runs in your Cloudflare account. No shared backend.</span>
         </p>
       </div>
     </div>
   </header>
 
   <main class="shell">
-    <section aria-labelledby="install-title">
+    <div class="setup-grid">
+      <!-- ── Install ── -->
+      <section>
       <div class="section-heading">
-        <h2 id="install-title">Install Mimir</h2>
-        <p>Two commands. Your account, your infrastructure.</p>
+        <h2>Install Mimir</h2>
       </div>
-
-      <div class="install-panel">
-        <div class="install-command">
-          <pre class="command"><code><span class="prompt">$ </span>go run github.com/cloudboy-jh/mimir/cmd/mimir@latest install
+      <div class="code-panel">
+        <div class="platform-tabs" role="tablist" aria-label="Operating system">
+          <button class="platform-tab" type="button" role="tab" aria-selected="true" aria-controls="install-windows" data-platform="windows">Windows</button>
+          <button class="platform-tab" type="button" role="tab" aria-selected="false" aria-controls="install-unix" data-platform="unix">macOS / Linux</button>
+        </div>
+        <div class="platform-panel" id="install-windows" role="tabpanel">
+          <div class="code-block">
+            <pre class="command"><code><span class="prompt">PS&gt; </span>irm https://raw.githubusercontent.com/cloudboy-jh/mimir/master/install.ps1 | iex
+<span class="prompt">PS&gt; </span>mimir setup</code></pre>
+            <button class="copy-button" type="button" data-copy="irm https://raw.githubusercontent.com/cloudboy-jh/mimir/master/install.ps1 | iex&#10;mimir setup" data-tooltip="Copy" aria-label="Copy Windows install commands">
+              <svg class="copy-icon" aria-hidden="true"><use href="#copy-symbol"/></svg>
+              <svg class="check-icon" aria-hidden="true"><use href="#check-symbol"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="platform-panel" id="install-unix" role="tabpanel" hidden>
+          <div class="code-block">
+            <pre class="command"><code><span class="prompt">$ </span>curl -fsSL https://raw.githubusercontent.com/cloudboy-jh/mimir/master/install.sh | sh
 <span class="prompt">$ </span>mimir setup</code></pre>
-          <button class="copy-button" type="button" data-copy="go run github.com/cloudboy-jh/mimir/cmd/mimir@latest install&#10;mimir setup" data-tooltip="Copy" aria-label="Copy install commands">
+            <button class="copy-button" type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/cloudboy-jh/mimir/master/install.sh | sh&#10;mimir setup" data-tooltip="Copy" aria-label="Copy macOS and Linux install commands">
+              <svg class="copy-icon" aria-hidden="true"><use href="#copy-symbol"/></svg>
+              <svg class="check-icon" aria-hidden="true"><use href="#check-symbol"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="code-note">Installs the CLI, then provisions D1, R2, and the private dashboard in your account.</p>
+      </div>
+      </section>
+
+      <!-- ── Demo ── -->
+      <section>
+      <div class="section-heading">
+        <h2>Try it locally</h2>
+      </div>
+      <div class="code-panel">
+        <div class="code-block">
+          <pre class="command"><code><span class="prompt">$ </span>mimir demo</code></pre>
+          <button class="copy-button" type="button" data-copy="mimir demo" data-tooltip="Copy" aria-label="Copy mimir demo">
             <svg class="copy-icon" aria-hidden="true"><use href="#copy-symbol"/></svg>
             <svg class="check-icon" aria-hidden="true"><use href="#check-symbol"/></svg>
           </button>
         </div>
-        <p class="install-note">Installs the CLI, then provisions Mimir inside your Cloudflare account.</p>
+        <p class="code-note">Opens the full dashboard on localhost with synthetic data. No Cloudflare account, no API key, no setup.</p>
+      </div>
+      </section>
+    </div>
+
+    <!-- ── Harnesses ── -->
+    <section>
+      <div class="section-heading">
+        <h2>Works with your coding agents</h2>
+        <p>One memory layer across harnesses</p>
+      </div>
+      <div class="harness-grid">
+        <div class="harness-item"><img src="assets/icons/hermes.svg" alt=""><span>Hermes</span></div>
+        <div class="harness-item"><img src="assets/icons/claude.svg" alt=""><span>Claude Code</span></div>
+        <div class="harness-item"><img src="assets/icons/pi.svg" alt=""><span>Pi</span></div>
+        <div class="harness-item"><img src="assets/icons/opencode.svg" alt=""><span>OpenCode</span></div>
+        <div class="harness-item"><img src="assets/icons/codex.svg" alt=""><span>Codex</span></div>
+        <div class="harness-item"><img src="assets/icons/cursor.svg" alt=""><span>Cursor</span></div>
+        <div class="harness-item"><img src="assets/icons/oh-my-pi.svg" alt=""><span>Oh My Pi</span></div>
       </div>
     </section>
 
-    <section class="once-installed" aria-labelledby="actions-title">
+    <!-- ── Dashboard ── -->
+    <section>
       <div class="section-heading">
-        <h2 id="actions-title">Once installed</h2>
-        <a class="reference-link" href="https://github.com/cloudboy-jh/Mimir#command-reference">Full command reference →</a>
+        <h2>What Mimir remembers</h2>
+        <p>Sessions, outcomes, models, evidence</p>
+      </div>
+      <div class="screenshot-panel">
+        <img src="assets/mimir-dash-screenshot.png"
+             alt="Mimir dashboard showing captured sessions, outcomes, models, and token usage"
+             loading="lazy">
+        <p class="screenshot-label">Sessions · Outcomes · Capture state · Models · Tokens · Git artifacts · Request evidence · Sub-agent hierarchy</p>
+      </div>
+    </section>
+
+    <!-- ── CLI Reference ── -->
+    <section class="once-installed">
+      <div class="section-heading">
+        <h2 id="actions-title">CLI Reference</h2>
+        <a class="reference-link" href="https://mimir-docs.pages.dev/cli/">Full CLI reference →</a>
       </div>
 
       <ul class="action-list">
@@ -648,20 +761,54 @@
       </ul>
     </section>
 
-    <aside class="requirements" aria-label="Installation requirements">
-      <p>Requires a Cloudflare account, OpenRouter API key, Go 1.25+, Node.js 22 with npm, and Bun.</p>
+    <aside class="requirements" aria-label="Requirements">
+      <p><strong>mimir demo</strong> needs nothing at all. <strong>mimir setup</strong> needs Node.js 22 and a Cloudflare account. No Go, no Bun.</p>
       <p>Another machine? Run <strong>mimir login</strong>.</p>
     </aside>
   </main>
 
-  <footer>◆ mimir</footer>
+  <footer>
+    <div class="shell footer-inner">
+      <p class="footer-brand"><span class="diamond">◆</span> mimir</p>
+      <div class="footer-links">
+        <a href="https://mimir-docs.pages.dev">Docs</a>
+        <a href="https://github.com/cloudboy-jh/Mimir">GitHub</a>
+        <a href="https://github.com/cloudboy-jh/Mimir/blob/master/LICENSE">MIT</a>
+      </div>
+    </div>
+  </footer>
+
   <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
 
   <script>
     const status = document.querySelector('#copy-status');
     const resetTimers = new WeakMap();
 
+    const selectPlatform = (platform) => {
+      document.querySelectorAll('[data-platform]').forEach((item) => {
+        const selected = item.dataset.platform === platform;
+        item.setAttribute('aria-selected', String(selected));
+        item.tabIndex = selected ? 0 : -1;
+      });
+      document.querySelector('#install-windows').hidden = platform !== 'windows';
+      document.querySelector('#install-unix').hidden = platform !== 'unix';
+    };
+
+    const detectedPlatform = (() => {
+      const platform = navigator.userAgentData?.platform || navigator.platform || '';
+      const agent = navigator.userAgent || '';
+      return /win/i.test(platform) || /windows/i.test(agent) ? 'windows' : 'unix';
+    })();
+
+    selectPlatform(detectedPlatform);
+
     document.addEventListener('click', async (event) => {
+      const tab = event.target.closest('[data-platform]');
+      if (tab) {
+        selectPlatform(tab.dataset.platform);
+        return;
+      }
+
       const button = event.target.closest('[data-copy]');
       if (!button) return;
 
@@ -699,7 +846,6 @@
         masthead.style.setProperty('--pointer-y', '45%');
       });
     }
-
   </script>
 </body>
 </html>

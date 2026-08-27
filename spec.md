@@ -34,7 +34,7 @@ There is no Mimir account, hosted backend, or shared memory service. It's self-h
 ## Design
 
 ### Vibe
-- Dark dashboard aesthetic — Zinc 950 (`#09090b`) canvas, Zinc 900 (`#18181b`) surfaces, and Teal 400 (`#2dd4bf`) signal color
+- Dark dashboard aesthetic - Zinc 950 (`#09090b`) canvas, Zinc 900 (`#18181b`) surfaces, and Teal 400 (`#2dd4bf`) signal color
 - IBM Plex Sans for interface and prose; IBM Plex Mono only for commands and technical evidence
 - Single page, compact. Everything above fold or near-fold on desktop.
 - Terminal-style bordered code blocks
@@ -44,10 +44,10 @@ There is no Mimir account, hosted backend, or shared memory service. It's self-h
 
 #### 1. Header bar
 - Left: Mimir pixel-art wordmark from `assets/mimir-readme.png`
-- Right: GitHub button — SVG GitHub icon + "GitHub", links to `https://github.com/cloudboy-jh/Mimir`
+- Right: GitHub button - SVG GitHub icon + "GitHub", links to `https://github.com/cloudboy-jh/Mimir`
 
 #### 2. Hero
-- **Private memory for coding agents** — main tagline
+- **Private memory for coding agents** - main tagline
 - Sub-line: *Records what your agents attempted, which models and files were involved, what failed, and whether the work landed.*
 
 #### 3. Install block (terminal-style bordered box)
@@ -99,7 +99,7 @@ Each command row gets a copy-to-clipboard on hover (just the command part, not t
 ## Technical requirements
 
 ### Static files
-- Static `.html` plus the supplied wordmark and favicon assets — no build step, no framework, no JS dependencies
+- Static `.html` plus the supplied wordmark and favicon assets - no build step, no framework, no JS dependencies
 - Inline CSS (no external stylesheets except Google Fonts for IBM Plex Sans and IBM Plex Mono)
 - Vanilla JS only for copy-to-clipboard (`navigator.clipboard.writeText()`)
 
@@ -108,7 +108,7 @@ Each command row gets a copy-to-clipboard on hover (just the command part, not t
 - On click: copies text, shows "copied ✓" feedback
 
 ### Responsive
-- Mobile-friendly — stacks vertically, code blocks `overflow-x: auto`
+- Mobile-friendly - stacks vertically, code blocks `overflow-x: auto`
 - Font scales on mobile
 
 ### Performance
@@ -133,13 +133,13 @@ mimir setup
 
 ### Quickstart commands
 ```
-mimir install     — reconcile managed local artifacts
-mimir setup       — provision and deploy Mimir
-mimir login       — connect another machine
-mimir search      — search saved session memory
-mimir session get — inspect a session record
-mimir dashboard   — open the private dashboard
-mimir doctor      — validate deployment
+mimir install     - reconcile managed local artifacts
+mimir setup       - provision and deploy Mimir
+mimir login       - connect another machine
+mimir search      - search saved session memory
+mimir session get - inspect a session record
+mimir dashboard   - open the private dashboard
+mimir doctor      - validate deployment
 ```
 
 ---
@@ -155,10 +155,10 @@ mimir doctor      — validate deployment
 
 ## Visual reference
 
-Feels like the Mimir dashboard — a Zinc-black canvas, flat bordered surfaces, compact mechanical controls, IBM Plex typography, and teal used only as a signal. The pixel-art wordmark carries the identity; commands remain monospace evidence.
+Feels like the Mimir dashboard - a Zinc-black canvas, flat bordered surfaces, compact mechanical controls, IBM Plex typography, and teal used only as a signal. The pixel-art wordmark carries the identity; commands remain monospace evidence.
 
 ---
 
 ## Deliverable
 
-An `index.html` plus optimized wordmark and favicon assets, written and pushed to a repo so Cloudflare Pages picks them up. Openable in a browser in 2 minutes — someone knows what Mimir is, how it works, and how to install it.
+An `index.html` plus optimized wordmark and favicon assets, written and pushed to a repo so Cloudflare Pages picks them up. Openable in a browser in 2 minutes - someone knows what Mimir is, how it works, and how to install it.
